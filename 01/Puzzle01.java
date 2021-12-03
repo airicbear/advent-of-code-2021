@@ -13,6 +13,7 @@ class Puzzle01 {
             while (s.hasNextInt()) {
                 measurements.add(s.nextInt());
             }
+            s.close();
             System.out.println("Part 1: " + countIncreases(measurements));
             System.out.println("Part 2: " + countThreeMeasurement(measurements));
         } catch (FileNotFoundException e) {
