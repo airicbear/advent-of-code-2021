@@ -13,16 +13,29 @@ class Puzzle01 {
             while (s.hasNextInt()) {
                 measurements.add(s.nextInt());
             }
-            System.out.println(countIncreases(measurements));
+            System.out.println("Part 1: " + countIncreases(measurements));
+            System.out.println("Part 2: " + countThreeMeasurement(measurements));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
-
+    
     private static int countIncreases(List<Integer> measurements) {
         int count = 0;
         for (int i = 1; i < measurements.size(); i++) {
             if (measurements.get(i) > measurements.get(i - 1)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int countThreeMeasurement(List<Integer> measurements) {
+        int count = 0;
+        for (int i = 0; i < measurements.size() - 3; i++) {
+            int winA = (measurements.get(i) + measurements.get(i + 1) + measurements.get(i + 2));
+            int winB = (measurements.get(i + 1) + measurements.get(i + 2) + measurements.get(i + 3));
+            if (winB > winA) {
                 count++;
             }
         }
