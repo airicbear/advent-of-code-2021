@@ -6,7 +6,7 @@ class Puzzle02 {
     public static void main(String[] args) {
         File file = new File(args[0]);
         try {
-            Submarine submarine = new Submarine(0, 0);
+            Submarine submarine = new Submarine();
 
             Scanner s = new Scanner(file);
             while (s.hasNextLine()) {
@@ -41,17 +41,26 @@ enum Direction {
 class Submarine {
     int xPos;
     int yPos;
+    int aim;
 
-    Submarine(int xPos, int yPos) {
+    Submarine(int xPos, int yPos, int aim) {
         this.xPos = xPos;
         this.yPos = yPos;
+        this.aim = aim;
+    }
+
+    Submarine() {
+        this(0, 0, 0);
     }
 
     public void move(Direction direction, int distance) {
         switch (direction) {
-            case forward -> this.xPos += distance;
-            case down -> this.yPos += distance;
-            case up -> this.yPos -= distance;
+            case forward -> {
+                this.xPos += distance;
+                this.yPos += aim * distance;
+            }
+            case down -> this.aim += distance;
+            case up -> this.aim -= distance;
         }
     }
 }
