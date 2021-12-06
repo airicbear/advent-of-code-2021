@@ -38,15 +38,20 @@ class Puzzle04 {
     }
 
     private static void run(List<Board> boards, int[] numbers) {
+        Board lastWinningBoard = null;
+        int lastWinningNumber = 0;
         for (int i = 0; i < numbers.length; i++) {
             for (Board board : boards) {
-                board.markNumber(numbers[i]);
-                if (board.isWinner()) {
-                    System.out.println(board.unmarkedSum() * numbers[i]);
-                    return;
+                if (!board.isWinner()) {
+                    board.markNumber(numbers[i]);
+                    if (board.isWinner()) {
+                        lastWinningBoard = board;
+                        lastWinningNumber = numbers[i];
+                    }
                 }
             }
         }
+        System.out.println(lastWinningBoard.unmarkedSum() * lastWinningNumber);
     }
 
     private static int[] readNumbers(String line) {
@@ -172,4 +177,3 @@ class Board {
         }
     }
 }
-
