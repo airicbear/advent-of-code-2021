@@ -1,36 +1,57 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 class Puzzle07 {
     public static void main(String[] args) {
-        File file = new File(args[0]);
+        final File file = new File(args[0]);
         try {
-            Scanner s = new Scanner(file);
-            String[] crabInput = s.nextLine().split(",");
-            int[] crabs = new int[crabInput.length];
-            for (int i = 0; i < crabs.length; i++) {
-                crabs[i] = Integer.parseInt(crabInput[i]);
+            final Scanner s = new Scanner(file);
+            final String[] positionInput = s.nextLine().split(",");
+            final int[] positions = new int[positionInput.length];
+            for (int i = 0; i < positions.length; i++) {
+                positions[i] = Integer.parseInt(positionInput[i]);
             }
             s.close();
 
-            long minSum = Integer.MAX_VALUE;
-            int pos = 0;
-            for (int i = 0; i < max(crabs); i++) {
-                long sum = 0;
-                for (int j = 0; j < crabs.length; j++) {
-                    sum += Math.abs(crabs[j] - i);
-                }
-                if (sum < minSum) {
-                    minSum = sum;
-                    pos = i;
-                }
-            }
-            System.out.println(minSum);
-            System.out.println(pos);
+            System.out.println(Long.toString(optimizedPosition(positions)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private static long optimizedPosition(int[] positions) {
+        final int maxPosition = max(positions);
+        final List<Long> positionCosts = new ArrayList<>();
+        for (int i = 0; i < maxPosition; i++) {
+            long sum = 0;
+            for (int j = 0; j < positions.length; j++) {
+                final long cost = sumTo(Math.abs(positions[j] - i));
+                sum += cost;
+            }
+            positionCosts.add(sum);
+        }
+        return min(positionCosts);
+    }
+
+    private static int sumTo(int n) {
+        int sum = 0;
+        for (int i = 0; i <= n; i++) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    private static long min(List<Long> list) {
+        long min = Long.MAX_VALUE;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i) < min) {
+                min = list.get(i);
+            }
+        }
+        return min;
     }
 
     private static int max(int[] array) {
