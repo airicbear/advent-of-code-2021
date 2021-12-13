@@ -8,7 +8,7 @@ class Puzzle13 {
     public static void main(String[] args) {
         File file = new File(args[0]);
         TransparentPaper paper = TransparentPaper.readTransparentPaper(file);
-        System.out.println(paper.numVisiblePoints());
+        System.out.println(paper);
     }
 }
 
@@ -82,7 +82,6 @@ class TransparentPaper {
                 } else {
                     paper.foldY(value);
                 }
-                break;
             }
             s.close();
             return paper;
