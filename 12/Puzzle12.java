@@ -100,7 +100,11 @@ class CaveGraph {
         visitedCaves.add(cave);
 
         for (Cave nextCave : map.get(cave)) {
-            if (nextCave.isBig() || !visitedCaves.contains(nextCave)) {
+            if (nextCave.isBig() || !visitedCaves.contains(nextCave) || (!nextCave.isStart() && !containsSmallTwice(cavePath))) {
+                if (nextCave.isSmall() && containsSmallTwice(cavePath) && cavePath.contains(nextCave)) {
+                    continue;
+                }
+
                 cavePath.add(nextCave);
                 calculateAllPaths(nextCave, destination, visitedCaves, cavePath);
                 cavePath.remove(nextCave);
@@ -108,5 +112,17 @@ class CaveGraph {
         }
 
         visitedCaves.remove(cave);
+    }
+
+    private boolean containsSmallTwice(List<Cave> path) {
+        Map<Cave, Integer> count = new HashMap<>();
+        for (Cave cave : path) {
+            count.putIfAbsent(cave, 0);
+            count.put(cave, count.get(cave) + 1);
+            if (cave.isSmall() && count.get(cave) > 1) {
+                return true;
+            }
+        }
+        return false;
     }
 }
