@@ -8,9 +8,11 @@ class Puzzle11 {
     public static void main(String[] args) {
         File file = new File(args[0]);
         OctopusGrid octopusGrid = OctopusGrid.read(file);
-        System.out.println(octopusGrid);
-        octopusGrid.takeSteps(100);
+        while (octopusGrid.getFirstStepAllFlash() == -1) {
+            octopusGrid.takeStep();
+        }
         System.out.println(octopusGrid.getNumFlashes());
+        System.out.println(octopusGrid.getFirstStepAllFlash());
     }
 }
 
@@ -84,9 +86,13 @@ class Octopus {
 class OctopusGrid {
     List<List<Octopus>> octopi;
     int numFlashes;
+    int step;
+    int firstStepAllFlash;
     
     OctopusGrid(List<List<Octopus>> octopi) {
         this.octopi = octopi;
+        this.step = 0;
+        this.firstStepAllFlash = -1;
         this.numFlashes = 0;
         for (List<Octopus> row : octopi) {
             for (Octopus octopus : row) {
@@ -134,10 +140,29 @@ class OctopusGrid {
     }
 
     public void takeStep() {
+        this.step++;
         resetFlash();
         increaseAll();
         flashOctopi();
+        if (isAllFlashed()) {
+            this.firstStepAllFlash = this.step;
+        }
         setFlashedToZero();
+    }
+
+    public int getFirstStepAllFlash() {
+        return this.firstStepAllFlash;
+    }
+
+    private boolean isAllFlashed() {
+        for (int row = 0; row < this.octopi.size(); row++) {
+            for (int col = 0; col < this.octopi.get(0).size(); col++) {
+                if (!getOctopus(row, col).isFlashed()) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void setFlashedToZero() {
